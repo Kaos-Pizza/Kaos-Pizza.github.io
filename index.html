@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kaos NY Pizza — San Miguel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Archivo:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #D23133;
+      --red-lt: #e23a3c;
+      --gold:   #E8A23C;
+      --cream:  #ECE5D6;
+      --bg:     #1C1511;
+      --bg-dk:  #141010;
+      --card:   #1F1714;
+      --muted:  #A99E8F;
+      --muted2: #B6AB9C;
+      --text:   #D8CEBF;
+      --border: rgba(233,226,210,0.10);
+      --green:  #1FAE54;
+    }
+
+    html { overflow-x: hidden; scroll-behavior: smooth; }
+    body { font-family: 'Archivo', sans-serif; background: var(--bg); color: var(--cream); overflow-x: hidden; }
+
+    /* BG patterns */
+    .bg-grid {
+      background:
+        linear-gradient(180deg, rgba(8,5,4,.55), rgba(8,5,4,.82)),
+        repeating-linear-gradient(90deg, #2a201b 0 2px, transparent 2px 98px),
+        repeating-linear-gradient(0deg,  #2a201b 0 2px, transparent 2px 34px),
+        #1c1511;
+    }
+
+    /* Neon flicker animation */
+    @keyframes flick {
+      0%,95%,100% { opacity:1; text-shadow:0 0 2px #fff,0 0 14px var(--red),0 0 34px rgba(210,49,51,.75); }
+      96%          { opacity:.7; text-shadow:none; }
+      97%          { opacity:1; text-shadow:0 0 2px #fff,0 0 14px var(--red),0 0 34px rgba(210,49,51,.75); }
+      98.5%        { opacity:.4; text-shadow:none; }
+    }
+    @keyframes rise {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(20,16,12,0.96); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 68px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .nav-logo-img { width: 42px; height: 42px; border-radius: 50%; background: url('kaos-logo.jpg') center / cover no-repeat; flex-shrink: 0; }
+    .nav-brand { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1.15rem; color: var(--cream); letter-spacing: 0.5px; }
+    .nav-brand span { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+    .nav-links a { font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none; color: var(--muted2); transition: color .2s; }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-wa { display: flex; align-items: center; gap: 8px; background: var(--green); color: #fff !important; font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 0.82rem !important; letter-spacing: 1px; text-transform: uppercase; padding: 0.55rem 1.1rem; border-radius: 6px; text-decoration: none; transition: background .2s; white-space: nowrap; }
+    .nav-wa:hover { background: #23c25e !important; }
+    .nav-wa::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #fff; flex-shrink: 0; }
+
+    /* ── HAMBURGER ── */
+    .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+    .hamburger span { width: 22px; height: 2px; background: var(--cream); border-radius: 2px; display: block; transition: all .25s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 7rem; min-height: 100vh;
+    }
+    #hero::before {
+      content: ''; position: absolute; inset: 0; z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(8,5,4,.55), rgba(8,5,4,.82)),
+        repeating-linear-gradient(90deg, #2a201b 0 2px, transparent 2px 98px),
+        repeating-linear-gradient(0deg,  #2a201b 0 2px, transparent 2px 34px),
+        #1c1511;
+    }
+    #hero > * { position: relative; z-index: 1; }
+
+    .hero-logo-wrap {
+      width: 200px; height: 200px; border-radius: 50%;
+      background: url('kaos-logo.jpg') center / cover no-repeat;
+      box-shadow: 0 0 0 3px rgba(210,49,51,.55), 0 0 40px rgba(210,49,51,.35), 0 18px 50px rgba(0,0,0,.6);
+      margin-bottom: 2rem;
+      animation: rise .7s ease both;
+    }
+    .hero-eyebrow {
+      font-family: 'Oswald', sans-serif; font-weight: 500;
+      font-size: 0.95rem; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: 'Anton', sans-serif; font-size: clamp(3.5rem, 10vw, 6.5rem);
+      line-height: .95; letter-spacing: 1px; color: var(--cream);
+      text-shadow: 0 0 2px #fff, 0 0 14px var(--red), 0 0 34px rgba(210,49,51,.75);
+      animation: flick 7s infinite;
+      margin-bottom: 2rem;
+    }
+    .hero-badges { display: flex; gap: 0.85rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 9px;
+      border: 1px solid rgba(233,226,210,.22); border-radius: 999px;
+      padding: 0.6rem 1.25rem;
+      font-family: 'Oswald', sans-serif; font-weight: 500; font-size: 0.82rem;
+      letter-spacing: 1.5px; text-transform: uppercase; color: var(--text);
+    }
+    .hero-badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .btn-red-glow {
+      background: var(--red); color: #fff;
+      font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 1rem 2.2rem; border-radius: 7px; text-decoration: none;
+      box-shadow: 0 0 26px rgba(210,49,51,.5); transition: background .2s, transform .15s;
+    }
+    .btn-red-glow:hover { background: var(--red-lt); transform: translateY(-2px); }
+    .btn-outline-cream {
+      border: 1.5px solid rgba(233,226,210,.32); color: var(--cream);
+      font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 1rem 2.2rem; border-radius: 7px; text-decoration: none;
+      transition: border-color .2s, transform .15s;
+    }
+    .btn-outline-cream:hover { border-color: var(--cream); transform: translateY(-2px); }
+
+    /* ── STRIPE CHECKER ── */
+    .stripe-checker {
+      height: 16px;
+      background: repeating-conic-gradient(var(--red) 0% 25%, #2a201b 0% 50%) 0 0/32px 32px;
+      border: none; display: block;
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 6rem 2.5rem; }
+    .s-label {
+      font-family: 'Oswald', sans-serif; font-weight: 500;
+      font-size: 0.85rem; letter-spacing: 5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.75rem; display: block;
+    }
+    .s-title {
+      font-family: 'Anton', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: .97; letter-spacing: 1px; color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .s-sub { font-size: 1rem; color: var(--muted); max-width: 580px; line-height: 1.7; }
+    .s-header { text-align: center; margin-bottom: 3rem; }
+    .s-header .s-sub { margin: 0.5rem auto 0; }
+
+    /* ── MENU ── */
+    #menu { background: var(--bg-dk); }
+    .menu-inner { max-width: 1000px; margin: 0 auto; }
+    .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem 3.5rem; margin-top: 2.5rem; }
+    .menu-cat-title {
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 1.1rem;
+      letter-spacing: 2px; text-transform: uppercase; color: var(--red);
+      white-space: nowrap; margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 0.85rem;
+    }
+    .menu-cat-title::after { content: ''; flex: 1; height: 1px; background: rgba(233,226,210,.12); }
+    .menu-item { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 1.1rem; }
+    .menu-item-info { flex: 1; min-width: 0; }
+    .menu-item-name { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .3px; color: var(--cream); }
+    .menu-item-desc { font-size: 0.83rem; line-height: 1.4; color: var(--muted); margin-top: 2px; }
+    .menu-dots { flex: 1; align-self: flex-end; height: 1px; border-bottom: 1.5px dotted rgba(233,226,210,.2); min-width: 18px; }
+    .menu-price { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 1rem; color: var(--gold); white-space: nowrap; }
+    .menu-wa { display: block; text-align: center; margin-top: 3.5rem; }
+
+    /* ── NOSOTROS ── */
+    #nosotros { background: var(--bg-grid); }
+    #nosotros.bg-grid { background: linear-gradient(180deg,rgba(8,5,4,.5),rgba(8,5,4,.8)), repeating-linear-gradient(90deg,#2a201b 0 2px,transparent 2px 98px), repeating-linear-gradient(0deg,#2a201b 0 2px,transparent 2px 34px), #1c1511; }
+    .nosotros-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .nosotros-img {
+      border-radius: 14px; overflow: hidden;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 1.5rem; padding: 2.5rem;
+    }
+    .nosotros-img-inner {
+      width: 200px; height: 200px;
+      background: url('kaos-logo.jpg') center / cover no-repeat;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2px rgba(210,49,51,.4), 0 0 30px rgba(210,49,51,.35);
+    }
+    .nosotros-img-tagline {
+      font-family: 'Anton', sans-serif; font-size: 1.15rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted); text-align: center; line-height: 1.4;
+    }
+    .nosotros-img-tagline span { color: var(--red); }
+    .nosotros-text .s-title { text-shadow: 0 0 10px rgba(210,49,51,.2); }
+    .nosotros-text p { font-size: 1rem; color: var(--text); line-height: 1.7; margin-bottom: 1rem; }
+    .stats { display: flex; gap: 2.5rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+    .stat-val { font-family: 'Anton', sans-serif; font-size: 2.5rem; color: var(--red); line-height: 1; }
+    .stat-lbl { font-family: 'Oswald', sans-serif; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-top: 3px; }
+
+    /* ── RESEÑAS ── */
+    #resenas { background: var(--bg-dk); }
+    #resenas.bg-grid { background: linear-gradient(180deg,rgba(8,5,4,.5),rgba(8,5,4,.8)), repeating-linear-gradient(90deg,#2a201b 0 2px,transparent 2px 98px), repeating-linear-gradient(0deg,#2a201b 0 2px,transparent 2px 34px), #1c1511; }
+    .resenas-inner { max-width: 1120px; margin: 0 auto; }
+    .stars { color: var(--gold); font-size: 1.1rem; letter-spacing: 3px; margin-bottom: 0.85rem; }
+    .resenas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .resena-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.75rem; }
+    .resena-text { font-size: 0.975rem; line-height: 1.65; color: var(--text); margin-bottom: 1.25rem; font-style: italic; }
+    .resena-author { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; color: var(--cream); }
+    .resena-role { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+
+    /* ── LOCAL ── */
+    #local { background: var(--bg-dk); padding: 6rem 2.5rem; }
+    .local-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: stretch; }
+    .local-info .s-title { text-shadow: none; }
+    .info-rows { display: flex; flex-direction: column; gap: 1.4rem; margin-top: 2rem; }
+    .info-row { display: flex; gap: 1rem; align-items: flex-start; }
+    .info-icon { width: 42px; height: 42px; flex-shrink: 0; border-radius: 9px; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .info-label { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 0.82rem; letter-spacing: 1px; text-transform: uppercase; color: var(--cream); margin-bottom: 3px; }
+    .info-val { font-size: 0.95rem; color: var(--muted2); line-height: 1.55; }
+    .info-val a { color: var(--muted2); text-decoration: underline; text-underline-offset: 3px; transition: color .2s; }
+    .info-val a:hover { color: var(--cream); }
+    .info-val .wa-link { color: var(--green); text-decoration: none; font-weight: 600; }
+    .local-map { border-radius: 12px; overflow: hidden; border: 1px solid var(--border); min-height: 340px; }
+    .local-map iframe { width: 100%; height: 100%; min-height: 340px; border: none; display: block; filter: grayscale(60%) invert(90%) hue-rotate(180deg); }
+
+    /* ── FOOTER ── */
+    footer { background: #0C0907; border-top: 1px solid var(--border); padding: 3rem 2.5rem 2rem; text-align: center; }
+    .footer-logo { width: 60px; height: 60px; border-radius: 50%; background: url('kaos-logo.jpg') center / cover no-repeat; margin: 0 auto 1rem; box-shadow: 0 0 20px rgba(210,49,51,.3); }
+    .footer-brand { font-family: 'Anton', sans-serif; font-size: 1.8rem; color: var(--cream); letter-spacing: 1px; }
+    .footer-sub { font-family: 'Oswald', sans-serif; font-size: 0.78rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; margin-bottom: 1.5rem; }
+    .footer-wa a { font-family: 'Oswald', sans-serif; font-weight: 600; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; color: var(--green); text-decoration: none; }
+    .footer-copy { margin-top: 1.75rem; font-size: 0.7rem; color: rgba(233,226,210,.18); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; position: relative; }
+      .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(20,16,12,.98); border-bottom: 1px solid var(--border); z-index: 99; }
+      .nav-links.open { display: flex; }
+      .nav-links li a { display: block; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+      .hamburger { display: flex; }
+
+      #hero { padding: 4rem 1.5rem 5rem; min-height: 90vh; }
+      .hero-logo-wrap { width: 130px; height: 130px; }
+      .hero-title {
+        font-size: 2.2rem;
+        line-height: 1.1;
+        animation: none;
+        text-shadow: 0 0 1px #fff, 0 0 8px var(--red), 0 0 18px rgba(210,49,51,.5);
+      }
+
+      section { padding: 4rem 1.25rem; }
+
+      .nosotros-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .nosotros-img { aspect-ratio: auto; padding: 2rem 1.5rem; }
+      .nosotros-img-inner { width: 150px; height: 150px; }
+
+      .resenas-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+      .menu-grid { grid-template-columns: 1fr; gap: 2rem; }
+
+      .local-inner { grid-template-columns: 1fr; }
+      .local-map { min-height: 260px; }
+      .local-map iframe { min-height: 260px; }
+
+      .stats { gap: 1.5rem; flex-wrap: wrap; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title { font-size: 1.9rem; }
+      .s-title { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#top" class="nav-logo">
+    <span class="nav-logo-img"></span>
+    <span class="nav-brand">KAOS <span>NY</span> PIZZA</span>
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#resenas">Reseñas</a></li>
+    <li><a href="#local">Local</a></li>
+    <li><a href="https://wa.me/5491176438858" target="_blank" class="nav-wa">Pedí ahora</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<span id="top"></span>
+<section id="hero">
+  <div class="hero-logo-wrap"></div>
+  <p class="hero-eyebrow">La mejor pizza de San Miguel 🔥</p>
+  <h1 class="hero-title">NO ES<br>CUALQUIER<br>PIZZA</h1>
+  <div class="hero-badges">
+    <span class="hero-badge">Fermentación de 48 hs</span>
+    <span class="hero-badge">Ingredientes auténticos</span>
+  </div>
+  <div class="hero-ctas">
+    <a href="https://wa.me/5491176438858" target="_blank" class="btn-red-glow">Pedí por WhatsApp</a>
+    <a href="#menu" class="btn-outline-cream">Ver el menú</a>
+  </div>
+</section>
+
+<hr class="stripe-checker" />
+
+<!-- MENÚ -->
+<section id="menu">
+  <div class="menu-inner">
+    <div class="s-header">
+      <span class="s-label">Lo que sale del horno</span>
+      <h2 class="s-title">EL MENÚ</h2>
+      <p class="s-sub">Pizzas enteras e individuales, recién salidas del horno.</p>
+    </div>
+
+    <div class="menu-grid">
+      <!-- Pizzas enteras -->
+      <div>
+        <div class="menu-cat-title">Pizzas Enteras</div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Muzzarella</div>
+            <div class="menu-item-desc">Salsa de tomate, muzzarella generosa y orégano.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$22.800</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Margherita</div>
+            <div class="menu-item-desc">Tomate, muzzarella, tomate fresco y albahaca.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$22.800</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Pepperoni</div>
+            <div class="menu-item-desc">Doble pepperoni crocante sobre muzzarella.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$24.800</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Kaos</div>
+            <div class="menu-item-desc">Salsa de tomate, muzzarella, pollo y salsa barbacoa.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$26.800</span>
+        </div>
+      </div>
+
+      <!-- Individuales -->
+      <div>
+        <div class="menu-cat-title">Indis · Individuales</div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Muzzarella</div>
+            <div class="menu-item-desc">La clásica, en versión individual.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$14.680</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Margherita</div>
+            <div class="menu-item-desc">Tomate, muzzarella y albahaca, para uno.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$14.680</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Pepperoni</div>
+            <div class="menu-item-desc">Pepperoni crocante, tamaño individual.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$15.800</span>
+        </div>
+        <div class="menu-item">
+          <div class="menu-item-info">
+            <div class="menu-item-name">Kaos</div>
+            <div class="menu-item-desc">Salsa de tomate, muzzarella, pollo y barbacoa. Individual.</div>
+          </div>
+          <span class="menu-dots"></span>
+          <span class="menu-price">$16.800</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-wa">
+      <a href="https://wa.me/5491176438858" target="_blank" class="btn-red-glow">Hacé tu pedido por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<hr class="stripe-checker" />
+
+<!-- NOSOTROS -->
+<section id="nosotros" class="bg-grid">
+  <div class="nosotros-inner">
+    <div class="nosotros-img">
+      <div class="nosotros-img-inner"></div>
+      <p class="nosotros-img-tagline">San Miguel · Buenos Aires<br><span>Desde 2024</span></p>
+    </div>
+    <div class="nosotros-text">
+      <span class="s-label">Nuestra historia</span>
+      <h2 class="s-title">UN PEDAZO DE<br>NUEVA YORK<br>EN EL BARRIO</h2>
+      <p>"Pizza NY Style" no es solo un nombre. Es masa fina y elástica que se dobla en la mano, base crocante de bordes dorados, salsa de tomate apenas especiada y muzzarella en su punto justo.</p>
+      <p>Porciones XXL que invitan a disfrutar cada bocado. Un clásico neoyorquino con sabor intenso y un estilo inconfundible — eso es Kaos.</p>
+      <div class="stats">
+        <div><div class="stat-val">XXL</div><div class="stat-lbl">Porciones</div></div>
+        <div><div class="stat-val">100%</div><div class="stat-lbl">NY Style</div></div>
+        <div><div class="stat-val">15%</div><div class="stat-lbl">Off pick-up</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="stripe-checker" />
+
+<!-- RESEÑAS -->
+<section id="resenas" class="bg-grid">
+  <div class="resenas-inner">
+    <div class="s-header">
+      <span class="s-label">Lo que dicen los fans</span>
+      <h2 class="s-title">RESEÑAS</h2>
+      <p class="s-sub" style="margin:0.5rem auto 0">Reseñas reales de nuestros clientes en Google · <span style="color:var(--gold)">★ 5.0</span></p>
+    </div>
+    <div class="resenas-grid">
+      <div class="resena-card">
+        <div class="stars">★★★★★</div>
+        <p class="resena-text">"Excelente pizza estilo NY. Riquísimo, la salsa es de las mejores que he probado. Un gusto tener este estilo de pizza en San Miguel. ¡La Kaos mi favorita!"</p>
+        <div class="resena-author">Florencia Orio</div>
+        <div class="resena-role">Local Guide · hace 10 meses</div>
+      </div>
+      <div class="resena-card">
+        <div class="stars">★★★★★</div>
+        <p class="resena-text">"Gran opción para comer pizza estilo NY en San Miguel. El sistema de pedidos, 10 puntos. Muy amable y súper puntual. La pizza genial, la salsa de tomate se lleva los aplausos. Sin dudas recomiendo y seguiré pidiendo."</p>
+        <div class="resena-author">Nicolas Cuelli</div>
+        <div class="resena-role">Local Guide · hace 9 meses</div>
+      </div>
+      <div class="resena-card">
+        <div class="stars">★★★★★</div>
+        <p class="resena-text">"La mejor pizza que comí en la zona. Masa espectacular, ingredientes de calidad y llega calentita. Un clásico neoyorquino que no se consigue en cualquier lado. Ya somos clientes fijos."</p>
+        <div class="resena-author">Lorenzo Wade</div>
+        <div class="resena-role">hace 1 mes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="stripe-checker" />
+
+<!-- LOCAL -->
+<section id="local">
+  <div class="local-inner">
+    <div class="local-info">
+      <span class="s-label">Dónde y cuándo</span>
+      <h2 class="s-title">PASÁ A BUSCARLA<br>O TE LA LLEVAMOS</h2>
+      <div class="info-rows">
+        <div class="info-row">
+          <div class="info-icon">📍</div>
+          <div>
+            <div class="info-label">Dirección</div>
+            <div class="info-val">
+              <a href="https://www.google.com/maps?q=Domingo+Faustino+Sarmiento+1412+San+Miguel+Buenos+Aires" target="_blank">
+                Domingo F. Sarmiento 1412<br>B1665 San Miguel, Buenos Aires
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">🕐</div>
+          <div>
+            <div class="info-label">Horarios</div>
+            <div class="info-val">Lun a Vie · 12:00–15:30 y 20:00–23:30<br>Sáb y Dom · 20:00–00:00</div>
+          </div>
+        </div>
+        <div class="info-row">
+          <div class="info-icon">💬</div>
+          <div>
+            <div class="info-label">Pedidos</div>
+            <div class="info-val">
+              Delivery a domicilio · 15% off retirando en el local<br>
+              <a href="https://wa.me/5491176438858" target="_blank" class="wa-link">→ Escribinos por WhatsApp</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="local-map">
+      <iframe
+        src="https://www.google.com/maps?q=Domingo+Faustino+Sarmiento+1412+San+Miguel+Buenos+Aires&output=embed"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo"></div>
+  <div class="footer-brand">KAOS NY PIZZA</div>
+  <div class="footer-sub">NY Pizza · San Miguel · Buenos Aires</div>
+  <div class="footer-wa"><a href="https://wa.me/5491176438858" target="_blank">Pedí por WhatsApp</a></div>
+  <p class="footer-copy">© 2024 Kaos NY Pizza — Todos los derechos reservados</p>
+</footer>
+
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('open');
+    });
+  });
+</script>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/5491176438858" target="_blank" class="wa-float" aria-label="Escribinos por WhatsApp">
+  <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+    <path d="M16 2C8.268 2 2 8.268 2 16c0 2.47.67 4.784 1.838 6.77L2 30l7.43-1.812A13.94 13.94 0 0016 30c7.732 0 14-6.268 14-14S23.732 2 16 2z" fill="#fff"/>
+    <path d="M16 4.5c-6.351 0-11.5 5.149-11.5 11.5 0 2.14.587 4.142 1.607 5.854l.198.334-1.04 3.8 3.908-1.022.323.188A11.457 11.457 0 0016 27.5c6.351 0 11.5-5.149 11.5-11.5S22.351 4.5 16 4.5z" fill="#1FAE54"/>
+    <path d="M12.1 10.5c-.28-.005-.59.002-.87.63-.32.72-1.2 2.95-.12 4.77 1.09 1.83 2.8 4.01 5.99 5.15 1.02.37 1.82.36 2.44.18.75-.22 1.53-.91 1.75-1.71.09-.32.09-.62.04-.87-.06-.2-.26-.31-.52-.44l-1.97-.9c-.27-.13-.44-.15-.64.1l-.64.8c-.16.2-.33.22-.59.1-1.09-.49-2.31-1.61-3.03-3.03-.17-.33-.08-.51.1-.68l.57-.63c.18-.18.24-.34.13-.62l-.78-2.04c-.16-.42-.36-.62-.64-.84-.11-.08-.28-.12-.46-.13z" fill="#fff"/>
+  </svg>
+</a>
+
+<style>
+  .wa-float {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 200;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: #1FAE54;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 18px rgba(31,174,84,.55), 0 2px 8px rgba(0,0,0,.35);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(31,174,84,.7), 0 2px 8px rgba(0,0,0,.35); }
+</style>
+
+</body>
+</html>
